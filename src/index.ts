@@ -1,11 +1,12 @@
 import { Hono } from 'hono'
-import availability from './routes/availability'
 import { validateEnv } from './env'
 import { checkAllPlansAvailability } from './services/ovh'
 import { sendAvailabilityNotification } from './services/notification'
 import type { Bindings, StatusType } from './types'
 
 const app = new Hono<{ Bindings: Bindings }>()
+
+const VALID_STATUS_TYPES: StatusType[] = ['status', 'linuxStatus', 'windowsStatus']
 
 // Validate environment variables on every request
 app.use('*', async (c, next) => {
@@ -14,17 +15,16 @@ app.use('*', async (c, next) => {
 })
 
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
+  return c.json({ 
+    message: 'OVH VPS Tracker',
+    status: 'running'
+  })
 })
-
-app.route('/', availability)
 
 // Scheduled handler for cron jobs
 async function scheduled(event: { scheduledTime: number }, env: Bindings) {
   validateEnv(env)
-  
-  const VALID_STATUS_TYPES: StatusType[] = ['status', 'linuxStatus', 'windowsStatus']
-  
+
   const notifyRegions = env.NOTIFY_REGIONS
     .split(',')
     .map(r => r.trim().toUpperCase())
