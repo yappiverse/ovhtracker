@@ -13,6 +13,9 @@
       "custom_domain": true
     }
   ],
+  "triggers": {
+    "crons": ["0,30 * * * *"]
+  },
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },
