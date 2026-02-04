@@ -6,6 +6,13 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "routes": [
+    {
+      "pattern": "ovhtracker.lmpt.in",
+      "zone_name": "lmpt.in",
+      "custom_domain": true
+    }
+  ],
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },
